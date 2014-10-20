@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>91 Weather Moon Name Configuration</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="../css/pebble.fonts.min.css" />
+    <link rel="stylesheet" href="../css/pebble.min.css" />
+    <link rel="stylesheet" href="../css/jquery.mobile.icons.min.css" />
+    <link rel="stylesheet" href="../css/jquery.mobile.structure-1.4.4.min.css" />
+
+    <script src="../js/jquery-1.11.1.min.js" ></script>
+    <script src="../js/jquery.mobile-1.4.4.min.js"></script>
+</head>
+<body>
+
+<div data-role="page" data-theme="c">
+    <div data-role="header">
+        <h1>91 Weather Moon Nameday Configuration</h1>
+    </div>
+
+    <div role="main" class="ui-content">
+        <fieldset class="ui-field-contain">
+            <label for="lang">Language</label>
+            <select id="lang" name="lang">
+                <option value="en">English</option>
+                <option value="sk">Slovak</option>
+            </select>
+            <br />
+            <p><small>This is the default language for the watch face, settings, etc.</small></p>
+        </fieldset>
+        <hr />
+        <fieldset class="ui-field-contain">
+            <label for="unicode">UNICODE</label>
+            <input type="checkbox" id="unicode" name="unicode" data-role="flipswitch">
+            <br />
+            <p><small>Use UNICODE version of the watch face strings. This is useful for non-English languages when there is a custom firmware installed on the Pebble watch.</small></p>
+        </fieldset>
+        <hr />
+        <fieldset class="ui-field-contain">
+            <label for="dateformat">Date Format</label>
+            <select id="dateformat" name="dateformat">
+                <option value="dd-mm-yy">dd-mm-yy</option>
+                <option value="mm-dd-yy">mm-dd-yy</option>
+                <option value="yy-mm-dd">yy-mm-dd</option>
+            </select>
+            <br />
+            <p><small>This is the default language for the watch face, settings, etc.</small></p>
+        </fieldset>
+        <hr />
+        <fieldset class="ui-field-contain">
+            <label for="units">Weather Units</label>
+            <select id="units" name="units">
+                <option value="metric">Metric</option>
+                <option value="imperial">Imperial</option>
+            </select>
+            <br />
+            <p><small>Present weather data using metric (&#8451;, meters per second) or imperial (&#8457;, miles per second) unit system.</small></p>
+        </fieldset>
+        <hr />
+        <fieldset class="ui-field-contain">
+            <label for="calendar">Nameday Calendar</label>
+            <select id="calendar" name="calendar">
+                <option value="en">English</option>
+                <option value="sk">Slovak</option>
+            </select>
+            <br />
+            <p><small>Show the nameday according to the selected calendar.</small></p>
+        </fieldset>
+        <hr />
+        <fieldset class="ui-field-contain">
+            <label for="invert">Invert colours</label>
+            <input type="checkbox" id="invert" name="invert" data-role="flipswitch">
+            <br />
+            <p><small>Display the watch face with inverted colours (black on white).</small></p>
+        </fieldset>
+        <hr />
+        <fieldset class="ui-field-contain">
+            <label for="blink">Blink</label>
+            <input type="checkbox" id="blink" name="blink" data-role="flipswitch">
+            <br />
+            <p><small>The colon between the hours and minutes will blink every second.</small></p>
+        </fieldset>
+        <hr />
+        <fieldset class="ui-field-contain">
+            <label for="hourlyvibe">Hourly Vibe</label>
+            <input type="checkbox" id="hourlyvibe" name="hourlyvibe" data-role="flipswitch">
+            <br />
+            <p><small>Vibrate on the hour.</small></p>
+        </fieldset>
+        <hr />
+        <fieldset class="ui-field-contain">
+            <label for="bluetoothvibe">Bluetooth Vibe</label>
+            <input type="checkbox" id="bluetoothvibe" name="bluetoothvibe" data-role="flipswitch">
+            <br />
+            <p><small>Vibrate on Bluetooth disconnect.</small></p>
+        </fieldset>
+
+        <fieldset class="ui-grid-a">
+            <div class="ui-block-a"><button type="submit" data-theme="c" id="cancel">Cancel</button></div>
+            <div class="ui-block-b"><button type="submit" data-theme="b" id="submit">Submit</button></div>
+        </fieldset>
+    </div>
+</div>
+<script>
+    $().ready(function() {
+        var options = {};
+        var hash = window.location.hash.substring(1);
+        if (hash) {
+            try {
+                options = JSON.parse(decodeURIComponent(hash));
+            } catch (e) {
+            }
+        }
+        if (!("lang" in options)) {
+            options.lang = "en";
+        }
+        if (!("dateformat" in options)) {
+            options.dateformat = "dd-mm-yy";
+        }
+        if (!("units" in options)) {
+            options.units = "imperial";
+        }
+        if (!("calendar" in options)) {
+            options.calendar = "en";
+        }
+
+        $("#lang").val(options.lang).selectmenu("refresh");
+        $("#unicode").prop("checked", options.unicode).flipswitch("refresh");
+        $("#dateformat").val(options.dateformat).selectmenu("refresh");
+        $("#units").val(options.units).selectmenu("refresh");
+        $("#calendar").val(options.calendar).selectmenu("refresh");
+        $("#invert").prop("checked", options.invert).flipswitch("refresh");
+        $("#blink").prop("checked", options.blink).flipswitch("refresh");
+        $("#hourlyvibe").prop("checked", options.hourlyvibe).flipswitch("refresh");
+        $("#bluetoothvibe").prop("checked", options.bluetoothvibe).flipswitch("refresh");
+
+        $("#submit").click(function() {
+            var options = {
+                "lang": $("#lang").val(),
+                "unicode": $("#unicode").prop("checked"),
+                "dateformat": $("#dateformat").val(),
+                "units": $("#units").val(),
+                "calendar": $("#calendar").val(),
+                "invert": $("#invert").prop("checked"),
+                "blink": $("#blink").prop("checked"),
+                "hourlyvibe": $("#hourlyvibe").prop("checked"),
+                "bluetoothvibe": $("#bluetoothvibe").prop("checked")
+            };
+            document.location = "pebblejs://close#" + encodeURIComponent(JSON.stringify(options));
+        });
+
+        $("#cancel").click(function() {
+            document.location = "pebblejs://close#";
+        });
+    });
+</script>
+
+</body>
+</html>
