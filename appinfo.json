@@ -1,0 +1,54 @@
+{
+    "appKeys": {
+        "error": 0,
+        "weather_clouds": 11,
+        "weather_description": 4,
+        "weather_humidity": 6,
+        "weather_icon": 3,
+        "weather_id": 2,
+        "weather_loc_city": 14,
+        "weather_loc_country": 15,
+        "weather_loc_lat": 16,
+        "weather_loc_lon": 17,
+        "weather_loc_sunrise": 18,
+        "weather_loc_sunset": 19,
+        "weather_pressure": 7,
+        "weather_rain": 12,
+        "weather_recv_time": 1,
+        "weather_snow": 13,
+        "weather_temperature": 5,
+        "weather_wind_direction": 9,
+        "weather_wind_gust": 10,
+        "weather_wind_speed": 8
+    },
+    "capabilities": [
+        "location",
+        "configurable"
+    ],
+    "companyName": "mc1100",
+    "longName": "91 Weather Moonphase Nameday",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/menu_icon_91w.png",
+                "menuIcon": true,
+                "name": "IMAGE_MENU_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/background.png",
+                "name": "IMAGE_BACKGROUND",
+                "type": "png"
+            }
+        ]
+    },
+    "sdkVersion": "2",
+    "shortName": "91 Weather Moonphase Nameday",
+    "uuid": "6ebe49d7-bc89-498e-b147-2908f17c3fad",
+    "versionCode": 1,
+    "versionLabel": "2.1",
+    "watchapp": {
+        "watchface": true
+    }
+}
