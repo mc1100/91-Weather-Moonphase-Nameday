@@ -1,5 +1,5 @@
-#include "watchface.h"
 #include <pebble.h>
+#include "watchface.h"
 
 // BEGIN AUTO-GENERATED UI CODE; DO NOT MODIFY
 static Window *s_window;
@@ -32,7 +32,9 @@ static TextLayer *s_textlayer_sunrise;
 
 static void initialise_ui(void) {
   s_window = window_create();
-  window_set_fullscreen(s_window, true);
+  #ifndef PBL_SDK_3
+    window_set_fullscreen(s_window, 1);
+  #endif
   
   s_res_image_background = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND);
   s_res_bitham_42_light = fonts_get_system_font(FONT_KEY_BITHAM_42_LIGHT);
@@ -193,9 +195,40 @@ static void destroy_ui(void) {
 }
 // END AUTO-GENERATED UI CODE
 
+static void handle_tick(struct tm *tick_time, TimeUnits units_changed) {
+    // TODO	
+}
+
+static AppSync s_sync;
+static uint8_t s_sync_buffer[128];
+
+static void sync_changed_handler(const uint32_t key, const Tuple *new_tuple, const Tuple *old_tuple, void *context) {
+	switch (key) {
+    case OPTIONS_CHANGED_TS_KEY:
+		break;
+	}
+}
+
+static void sync_error_handler(DictionaryResult dict_error, AppMessageResult app_message_error, void *context) {
+  APP_LOG(APP_LOG_LEVEL_ERROR, "dictionary sync error!");
+}
+
+static void handle_bluetooth_connection(bool connected) {
+    if (!connected /* && settings.BluetoothVibe*/) {
+        vibes_long_pulse();
+    }
+
+    //layer_set_hidden(bitmap_layer_get_layer(bluetooth_layer), !connected);
+}
+
+static void handle_battery_state(BatteryChargeState charge) {
+}
+
 static void handle_window_unload(Window* window) {
-    app_sync_deinit(&sync);
     tick_timer_service_unsubscribe();
+    app_sync_deinit(&s_sync);
+	bluetooth_connection_service_unsubscribe();
+	battery_state_service_unsubscribe();
 	destroy_ui();
 }
 
@@ -204,22 +237,23 @@ int main(void) {
   	window_set_window_handlers(s_window, (WindowHandlers) { .unload = handle_window_unload });
 
 	// Avoids a blank screen on watch start.
-    time_t now = time(NULL);
-    struct tm *tick_time = localtime(&now);
-    update_display(tick_time);
-    tick_timer_service_subscribe(MINUTE_UNIT, handle_minute_tick);
-    Tuplet initial_values[] = {
-        TupletInteger(WEATHER_ICON_KEY, (uint8_t) 0),
-        TupletCString(WEATHER_TEMPERATURE_KEY, "- °"),
-        TupletCString(SUNRISE_KEY, "--:--"),
-        TupletCString(SUNSET_KEY, "--:--")
-    };
-    app_sync_init(&sync, sync_buffer, sizeof(sync_buffer), initial_values, ARRAY_LENGTH(initial_values),
-            sync_tuple_changed_callback, sync_error_callback, NULL);
-    app_message_open(64, 64);
+    //time_t now = time(NULL);
+    //struct tm *tick_time = localtime(&now);
+    //update_display(tick_time);
+
+	tick_timer_service_subscribe(MINUTE_UNIT, handle_tick);
+
+	app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
+	Tuplet initial_values[] = {
+        TupletInteger(OPTIONS_CHANGED_TS_KEY, (uint64_t) 0)
+	};
+	app_sync_init(&s_sync, s_sync_buffer, sizeof(s_sync_buffer), initial_values, ARRAY_LENGTH(initial_values), sync_changed_handler, sync_error_handler, NULL);
+
+    bluetooth_connection_service_subscribe(handle_bluetooth_connection);
+
+	battery_state_service_subscribe(handle_battery_state);
+
 	window_stack_push(s_window, true);
-
 	app_event_loop();
-
     window_destroy(s_window);
 }
