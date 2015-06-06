@@ -195,8 +195,116 @@ static void destroy_ui(void) {
 }
 // END AUTO-GENERATED UI CODE
 
+static void set_container_image(GBitmap **bmp_image, BitmapLayer *bmp_layer, const int resource_id, GPoint origin) {
+    GBitmap *old_image = *bmp_image;
+
+    *bmp_image = gbitmap_create_with_resource(resource_id);
+    GRect frame = (GRect) {
+            .origin = origin,
+            .size = (*bmp_image)->bounds.size
+    };
+    bitmap_layer_set_bitmap(bmp_layer, *bmp_image);
+    layer_set_frame(bitmap_layer_get_layer(bmp_layer), frame);
+
+    if (old_image) {
+        gbitmap_destroy(old_image);
+    }
+}
+
+static unsigned short get_display_hour(unsigned short hour) {
+    if (clock_is_24h_style()) {
+        return hour;
+    }
+
+    unsigned short display_hour = hour % 12;
+
+    // converts "0" to "12"
+    return display_hour ? display_hour : 12;
+}
+
+static double frac(double a) {
+    return a - floor(a);
+}
+
+static double fmod(double a, double b) {
+    double c = frac(fabs(a / b)) * fabs(b);
+    return (a < 0) ? -c : c;
+}
+
+/*
+ * Calculates the moon phase (0-7), accurate to 1 segment.
+ * 0 = > new moon.
+ * 4 => full moon.
+ */
+static int get_moon_phase() {
+    return (int) (round(fmod((time(NULL) - 592500) / 86400.d, 29.53058868) * 8 / 29.53058868d)) & 7;
+}
+
 static void handle_tick(struct tm *tick_time, TimeUnits units_changed) {
-    // TODO	
+    unsigned short display_hour = get_display_hour(current_time->tm_hour);
+
+    // Minute
+    set_container_image(&time_digits_images[2], time_digits_layers[2], BIG_DIGIT_IMAGE_RESOURCE_IDS[current_time->tm_min / 10],
+            GPoint(80, 94));
+    set_container_image(&time_digits_images[3], time_digits_layers[3], BIG_DIGIT_IMAGE_RESOURCE_IDS[current_time->tm_min % 10],
+            GPoint(111, 94));
+
+    if (the_last_hour != display_hour) {
+        int h = display_hour / 10;
+        if (!clock_is_24h_style()) {
+            if (the_last_hour == 25 || display_hour == 12) {
+                set_container_image(&time_format_image, time_format_layer,
+                        (current_time->tm_hour < 12) ? RESOURCE_ID_IMAGE_AM_MODE : RESOURCE_ID_IMAGE_PM_MODE, GPoint(118, 140));
+            }
+            if (!h) {
+                h = 10;
+            }
+        }
+
+        // Hour
+        set_container_image(&time_digits_images[0], time_digits_layers[0], BIG_DIGIT_IMAGE_RESOURCE_IDS[h], GPoint(4, 94));
+        set_container_image(&time_digits_images[1], time_digits_layers[1],
+                BIG_DIGIT_IMAGE_RESOURCE_IDS[display_hour % 10], GPoint(37, 94));
+
+        if (the_last_hour == 25 || !current_time->tm_hour) {
+            // Day of week
+            set_container_image(&day_name_image, day_name_layer,
+                    DAY_NAME_IMAGE_RESOURCE_IDS[current_time->tm_wday], GPoint(4, 71));
+
+            // Day
+            set_container_image(&date_digits_images[0], date_digits_layers[0],
+                    DATENUM_IMAGE_RESOURCE_IDS[current_time->tm_mday / 10], GPoint(55, 71));
+            set_container_image(&date_digits_images[1], date_digits_layers[1],
+                    DATENUM_IMAGE_RESOURCE_IDS[current_time->tm_mday % 10], GPoint(68, 71));
+
+            // Month
+            set_container_image(&date_digits_images[2], date_digits_layers[2],
+                    DATENUM_IMAGE_RESOURCE_IDS[(current_time->tm_mon + 1) / 10], GPoint(87, 71));
+            set_container_image(&date_digits_images[3], date_digits_layers[3],
+                    DATENUM_IMAGE_RESOURCE_IDS[(current_time->tm_mon + 1) % 10], GPoint(100, 71));
+
+            // Year
+            set_container_image(&date_digits_images[4], date_digits_layers[4],
+                    DATENUM_IMAGE_RESOURCE_IDS[(current_time->tm_year % 100) / 10], GPoint(115, 71));
+            set_container_image(&date_digits_images[5], date_digits_layers[5],
+                    DATENUM_IMAGE_RESOURCE_IDS[(current_time->tm_year % 100) % 10], GPoint(128, 71));
+
+            // moon phase
+            int moonphase = get_moon_phase();
+            set_container_image(&moon_phase_image, moon_phase_layer, MOON_IMAGE_RESOURCE_IDS[moonphase], GPoint(61, 143));
+            text_layer_set_text(moon_layer, moon_phase_text[moonphase]);
+
+            // nameday
+            text_layer_set_text(nd_layer, nameday_text[current_time->tm_mon][current_time->tm_mday - 1]);
+
+            // day & calendar week
+            static char cw_text[9];
+            strftime(cw_text, sizeof(cw_text), "D%j/T%V", current_time);
+            text_layer_set_text(cw_layer, cw_text);
+        }
+
+        the_last_hour = display_hour;
+    }
 }
 
 static AppSync s_sync;
@@ -204,9 +312,19 @@ static uint8_t s_sync_buffer[128];
 
 static void sync_changed_handler(const uint32_t key, const Tuple *new_tuple, const Tuple *old_tuple, void *context) {
 	switch (key) {
-    case OPTIONS_CHANGED_TS_KEY:
-		break;
-	}
+    case WEATHER_ICON_KEY:
+        set_container_image(&weather_image, weather_layer, WEATHER_IMAGE_RESOURCE_IDS[new_tuple->value->uint8], GPoint(4, 5));
+        break;
+    case WEATHER_TEMPERATURE_KEY:
+        text_layer_set_text(text_temperature_layer, new_tuple->value->cstring);
+        break;
+    case SUNRISE_KEY:
+        text_layer_set_text(text_sunrise_layer, new_tuple->value->cstring);
+        break;
+    case SUNSET_KEY:
+        text_layer_set_text(text_sunset_layer, new_tuple->value->cstring);
+        break;
+    }
 }
 
 static void sync_error_handler(DictionaryResult dict_error, AppMessageResult app_message_error, void *context) {
@@ -218,7 +336,7 @@ static void handle_bluetooth_connection(bool connected) {
         vibes_long_pulse();
     }
 
-    //layer_set_hidden(bitmap_layer_get_layer(bluetooth_layer), !connected);
+//    layer_set_hidden(bitmap_layer_get_layer(bluetooth_layer), !connected);
 }
 
 static void handle_battery_state(BatteryChargeState charge) {
@@ -236,16 +354,33 @@ int main(void) {
 	initialise_ui();
   	window_set_window_handlers(s_window, (WindowHandlers) { .unload = handle_window_unload });
 
+//    if (clock_is_24h_style()) {
+//        time_format_image = gbitmap_create_with_resource((clock_is_24h_style()) ? RESOURCE_ID_IMAGE_24_HOUR_MODE : RESOURCE_ID_IMAGE_AM_MODE);
+//        GRect frame = (GRect) {
+//                .origin = { .x = 118, .y = 140 },
+//                .size = time_format_image->bounds.size
+//        };
+//        time_format_layer = bitmap_layer_create(frame);
+//        bitmap_layer_set_bitmap(time_format_layer, time_format_image);
+//        layer_add_child(window_layer, bitmap_layer_get_layer(time_format_layer));
+//    } else {
+//        time_format_layer = bitmap_layer_create(GRectZero);
+//        layer_add_child(window_layer, bitmap_layer_get_layer(time_format_layer));
+//    }
+
 	// Avoids a blank screen on watch start.
-    //time_t now = time(NULL);
-    //struct tm *tick_time = localtime(&now);
-    //update_display(tick_time);
+//    time_t now = time(NULL);
+//    struct tm *tick_time = localtime(&now);
+//    handle_tick(tick_time, MINUTE_UNIT);
 
 	tick_timer_service_subscribe(MINUTE_UNIT, handle_tick);
 
 	app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
 	Tuplet initial_values[] = {
-        TupletInteger(OPTIONS_CHANGED_TS_KEY, (uint64_t) 0)
+//        TupletInteger(WEATHER_ICON_KEY, (uint8_t) 0),
+//        TupletCString(WEATHER_TEMPERATURE_KEY, "- °"),
+//        TupletCString(SUNRISE_KEY, "--:--"),
+//        TupletCString(SUNSET_KEY, "--:--")
 	};
 	app_sync_init(&s_sync, s_sync_buffer, sizeof(s_sync_buffer), initial_values, ARRAY_LENGTH(initial_values), sync_changed_handler, sync_error_handler, NULL);
 
