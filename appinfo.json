@@ -1,58 +1,352 @@
 {
-    "appKeys": {
-        "error_code": 2,
-        "error_message": 3,
-        "error_ts": 1,
-        "options_changed_ts": 24,
-        "weather_clouds": 15,
-        "weather_description": 8,
-        "weather_humidity": 10,
-        "weather_icon": 7,
-        "weather_id": 6,
-        "weather_loc_city": 18,
-        "weather_loc_country": 19,
-        "weather_loc_lat": 20,
-        "weather_loc_lon": 21,
-        "weather_loc_sunrise_ts": 22,
-        "weather_loc_sunset_ts": 23,
-        "weather_pressure": 11,
-        "weather_rain": 16,
-        "weather_response_ts": 5,
-        "weather_snow": 17,
-        "weather_temperature": 9,
-        "weather_ts": 4,
-        "weather_wind_direction": 13,
-        "weather_wind_gust": 14,
-        "weather_wind_speed": 12
-    },
-    "capabilities": [
-        "location",
-        "configurable"
-    ],
-    "companyName": "mc1100",
-    "longName": "91 Weather Moonphase Nameday",
-    "projectType": "native",
-    "resources": {
-        "media": [
-            {
-                "file": "images/menu_icon_91w.png",
-                "menuIcon": true,
-                "name": "IMAGE_MENU_ICON",
-                "type": "png"
-            },
-            {
-                "file": "images/background.png",
-                "name": "IMAGE_BACKGROUND",
-                "type": "png"
-            }
-        ]
-    },
-    "sdkVersion": "2",
-    "shortName": "91 Weather Moonphase Nameday",
-    "uuid": "6ebe49d7-bc89-498e-b147-2908f17c3fad",
-    "versionCode": 1,
-    "versionLabel": "2.1",
-    "watchapp": {
-        "watchface": true
-    }
+  "appKeys": {
+    "error_code": 2,
+    "error_message": 3,
+    "error_ts": 1,
+    "options_changed_ts": 24,
+    "weather_clouds": 15,
+    "weather_description": 8,
+    "weather_humidity": 10,
+    "weather_icon": 7,
+    "weather_id": 6,
+    "weather_loc_city": 18,
+    "weather_loc_country": 19,
+    "weather_loc_lat": 20,
+    "weather_loc_lon": 21,
+    "weather_loc_sunrise_ts": 22,
+    "weather_loc_sunset_ts": 23,
+    "weather_pressure": 11,
+    "weather_rain": 16,
+    "weather_response_ts": 5,
+    "weather_snow": 17,
+    "weather_temperature": 9,
+    "weather_ts": 4,
+    "weather_wind_direction": 13,
+    "weather_wind_gust": 14,
+    "weather_wind_speed": 12
+  },
+  "capabilities": [
+    "location",
+    "configurable"
+  ],
+  "companyName": "mc1100",
+  "longName": "91 Weather Moonphase Nameday",
+  "projectType": "native",
+  "resources": {
+    "media": [
+      {
+        "file": "images/menu_icon_91w.png",
+        "menuIcon": true,
+        "name": "IMAGE_MENU_ICON",
+        "type": "png"
+      },
+      {
+        "file": "images/background.png",
+        "name": "IMAGE_BACKGROUND",
+        "type": "png"
+      },
+      {
+        "file": "images/time_format_24H.png",
+        "name": "IMAGE_24_HOUR_MODE",
+        "type": "png"
+      },
+      {
+        "file": "images/time_format_AM.png",
+        "name": "IMAGE_AM_MODE",
+        "type": "png"
+      },
+      {
+        "file": "images/time_format_PM.png",
+        "name": "IMAGE_PM_MODE",
+        "type": "png"
+      },
+      {
+        "file": "images/num_0.png",
+        "name": "IMAGE_NUM_0",
+        "type": "png"
+      },
+      {
+        "file": "images/num_1.png",
+        "name": "IMAGE_NUM_1",
+        "type": "png"
+      },
+      {
+        "file": "images/num_2.png",
+        "name": "IMAGE_NUM_2",
+        "type": "png"
+      },
+      {
+        "file": "images/num_3.png",
+        "name": "IMAGE_NUM_3",
+        "type": "png"
+      },
+      {
+        "file": "images/num_4.png",
+        "name": "IMAGE_NUM_4",
+        "type": "png"
+      },
+      {
+        "file": "images/num_5.png",
+        "name": "IMAGE_NUM_5",
+        "type": "png"
+      },
+      {
+        "file": "images/num_6.png",
+        "name": "IMAGE_NUM_6",
+        "type": "png"
+      },
+      {
+        "file": "images/num_7.png",
+        "name": "IMAGE_NUM_7",
+        "type": "png"
+      },
+      {
+        "file": "images/num_8.png",
+        "name": "IMAGE_NUM_8",
+        "type": "png"
+      },
+      {
+        "file": "images/num_9.png",
+        "name": "IMAGE_NUM_9",
+        "type": "png"
+      },
+      {
+        "file": "images/datenum_0.png",
+        "name": "IMAGE_DATENUM_0",
+        "type": "png"
+      },
+      {
+        "file": "images/datenum_1.png",
+        "name": "IMAGE_DATENUM_1",
+        "type": "png"
+      },
+      {
+        "file": "images/datenum_2.png",
+        "name": "IMAGE_DATENUM_2",
+        "type": "png"
+      },
+      {
+        "file": "images/datenum_3.png",
+        "name": "IMAGE_DATENUM_3",
+        "type": "png"
+      },
+      {
+        "file": "images/datenum_4.png",
+        "name": "IMAGE_DATENUM_4",
+        "type": "png"
+      },
+      {
+        "file": "images/datenum_5.png",
+        "name": "IMAGE_DATENUM_5",
+        "type": "png"
+      },
+      {
+        "file": "images/datenum_6.png",
+        "name": "IMAGE_DATENUM_6",
+        "type": "png"
+      },
+      {
+        "file": "images/datenum_7.png",
+        "name": "IMAGE_DATENUM_7",
+        "type": "png"
+      },
+      {
+        "file": "images/datenum_8.png",
+        "name": "IMAGE_DATENUM_8",
+        "type": "png"
+      },
+      {
+        "file": "images/datenum_9.png",
+        "name": "IMAGE_DATENUM_9",
+        "type": "png"
+      },
+      {
+        "file": "images/day_sun.png",
+        "name": "IMAGE_DAY_NAME_SUN",
+        "type": "png"
+      },
+      {
+        "file": "images/day_mon.png",
+        "name": "IMAGE_DAY_NAME_MON",
+        "type": "png"
+      },
+      {
+        "file": "images/day_tue.png",
+        "name": "IMAGE_DAY_NAME_TUE",
+        "type": "png"
+      },
+      {
+        "file": "images/day_wed.png",
+        "name": "IMAGE_DAY_NAME_WED",
+        "type": "png"
+      },
+      {
+        "file": "images/day_thu.png",
+        "name": "IMAGE_DAY_NAME_THU",
+        "type": "png"
+      },
+      {
+        "file": "images/day_fri.png",
+        "name": "IMAGE_DAY_NAME_FRI",
+        "type": "png"
+      },
+      {
+        "file": "images/day_sat.png",
+        "name": "IMAGE_DAY_NAME_SAT",
+        "type": "png"
+      },
+      {
+        "file": "images/01d.png",
+        "name": "IMAGE_WEATHER_01D",
+        "type": "png"
+      },
+      {
+        "file": "images/01n.png",
+        "name": "IMAGE_WEATHER_01N",
+        "type": "png"
+      },
+      {
+        "file": "images/02d.png",
+        "name": "IMAGE_WEATHER_02D",
+        "type": "png"
+      },
+      {
+        "file": "images/02n.png",
+        "name": "IMAGE_WEATHER_02N",
+        "type": "png"
+      },
+      {
+        "file": "images/03.png",
+        "name": "IMAGE_WEATHER_03",
+        "type": "png"
+      },
+      {
+        "file": "images/04.png",
+        "name": "IMAGE_WEATHER_04",
+        "type": "png"
+      },
+      {
+        "file": "images/09d.png",
+        "name": "IMAGE_WEATHER_09D",
+        "type": "png"
+      },
+      {
+        "file": "images/09n.png",
+        "name": "IMAGE_WEATHER_09N",
+        "type": "png"
+      },
+      {
+        "file": "images/10d.png",
+        "name": "IMAGE_WEATHER_10D",
+        "type": "png"
+      },
+      {
+        "file": "images/10n.png",
+        "name": "IMAGE_WEATHER_10N",
+        "type": "png"
+      },
+      {
+        "file": "images/11d.png",
+        "name": "IMAGE_WEATHER_11D",
+        "type": "png"
+      },
+      {
+        "file": "images/11n.png",
+        "name": "IMAGE_WEATHER_11N",
+        "type": "png"
+      },
+      {
+        "file": "images/13d.png",
+        "name": "IMAGE_WEATHER_13D",
+        "type": "png"
+      },
+      {
+        "file": "images/13n.png",
+        "name": "IMAGE_WEATHER_13N",
+        "type": "png"
+      },
+      {
+        "file": "images/50d.png",
+        "name": "IMAGE_WEATHER_50D",
+        "type": "png"
+      },
+      {
+        "file": "images/50n.png",
+        "name": "IMAGE_WEATHER_50N",
+        "type": "png"
+      },
+      {
+        "file": "images/moon_0.png",
+        "name": "IMAGE_MOON_0",
+        "type": "png"
+      },
+      {
+        "file": "images/moon_1.png",
+        "name": "IMAGE_MOON_1",
+        "type": "png"
+      },
+      {
+        "file": "images/moon_2.png",
+        "name": "IMAGE_MOON_2",
+        "type": "png"
+      },
+      {
+        "file": "images/moon_3.png",
+        "name": "IMAGE_MOON_3",
+        "type": "png"
+      },
+      {
+        "file": "images/moon_4.png",
+        "name": "IMAGE_MOON_4",
+        "type": "png"
+      },
+      {
+        "file": "images/moon_5.png",
+        "name": "IMAGE_MOON_5",
+        "type": "png"
+      },
+      {
+        "file": "images/moon_6.png",
+        "name": "IMAGE_MOON_6",
+        "type": "png"
+      },
+      {
+        "file": "images/moon_7.png",
+        "name": "IMAGE_MOON_7",
+        "type": "png"
+      },
+      {
+        "file": "images/separator.png",
+        "name": "IMAGE_SEPARATOR",
+        "type": "png"
+      },
+      {
+        "file": "images/bluetooth.png",
+        "name": "IMAGE_BLUETOOTH",
+        "type": "png"
+      },
+      {
+        "file": "images/battery.png",
+        "name": "IMAGE_BATTERY",
+        "type": "png"
+      },
+      {
+        "file": "images/battery_charge.png",
+        "name": "IMAGE_BATTERY_CHARGE",
+        "type": "png"
+      }
+    ]
+  },
+  "sdkVersion": "3",
+  "shortName": "91 Weather Moonphase Nameday",
+  "uuid": "6ebe49d7-bc89-498e-b147-2908f17c3fad",
+  "versionCode": 1,
+  "versionLabel": "2.1",
+  "watchapp": {
+    "watchface": true
+  },
+  "targetPlatforms": [
+    "aplite",
+    "basalt"
+  ]
 }
